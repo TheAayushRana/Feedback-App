@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import FeedbackContext from "../Context/FeedbackContext";
 import Button from "../Design/Button";
 import Card from "../Design/Card";
 import RatingSelect from "./RatingSelect";
 
-export default function FeedbackForm({ handleAdd }) {
+export default function FeedbackForm() {
+  const { addFeedback } = useContext(FeedbackContext);
+
   const [text, setText] = useState("");
   const [disabledButton, setDisabledButton] = useState(true);
   const [message, setMessage] = useState("");
@@ -29,7 +32,7 @@ export default function FeedbackForm({ handleAdd }) {
       rating,
       text,
     };
-    handleAdd(newFeedback);
+    addFeedback(newFeedback);
     setText("");
     setDisabledButton(true);
   };

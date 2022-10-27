@@ -146,6 +146,11 @@ input {
   cursor: pointer;
   color: white;
 }
+.about-link {
+  position: absolute;
+  right: 50px;
+  bottom: 10px;
+}
 .footer {
   margin-top: 50px;
   text-align: center;

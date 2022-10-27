@@ -1,36 +1,38 @@
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FeedbackForm from "./Components/FeedbackForm";
 import FeedbackList from "./Components/FeedbackList";
 import FeedbackStats from "./Components/FeedbackStats";
 import Header from "./Components/Header";
-import FeedbackData from "./Data/FeedbackData";
 import Footer from "./Components/Footer";
+import AboutPage from "./Pages/AboutPage";
+import AboutIconLinking from "./Components/AboutIconLinking";
+import { FeedbackProvider } from "./Context/FeedbackContext";
 
 function App() {
-  const [feedback, setFeedback] = useState(FeedbackData);
 
-  const deleteItem = (id) => {
-    if (!window.alert("Confirm if you want to delete?")) {
-      setFeedback(feedback.filter((item) => item.id !== id));
-    }
-  };
-
-  const addFeedback = (newFeedback) => {
-    newFeedback.id = uuidv4(); // it will generate random id
-    setFeedback([newFeedback, ...feedback]);
-    // feedback.push(newFeedback); //state is immutable so we can't use push method
-  };
   return (
-    <>
-      <Header />
-      <div className="container">
-        <FeedbackForm handleAdd={addFeedback} />
-        <FeedbackStats feedback={feedback} />
-        <FeedbackList feedback={feedback} handleDelete={deleteItem} />
-      </div>
-      <Footer />
-    </>
+    <FeedbackProvider>
+      <Router>
+        <Header />
+        <div className="container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <FeedbackForm/>
+                  <FeedbackStats />
+                  <FeedbackList />
+                </>
+              }
+            />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+          <AboutIconLinking />
+        </div>
+        <Footer />
+      </Router>
+    </FeedbackProvider>
   );
 }
 
