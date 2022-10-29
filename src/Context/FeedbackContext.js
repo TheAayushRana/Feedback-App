@@ -26,21 +26,54 @@ export const FeedbackProvider = ({ children }) => {
     },
   ]);
 
+  const [feedbackEdit, setfeedbackEdit] = useState({
+    item: {},
+    edit: false,
+  });
+
+  // For Adding
   const addFeedback = (newFeedback) => {
     newFeedback.id = uuidv4(); // it will generate random id
     setFeedback([newFeedback, ...feedback]);
     // feedback.push(newFeedback); //state is immutable so we can't use push method
   };
 
+  // For Deleting
   const deleteItem = (id) => {
     if (!window.alert("Confirm if you want to delete?")) {
       setFeedback(feedback.filter((item) => item.id !== id));
     }
   };
 
+  // For Editing the feedback
+  const editFeedback = (item) => {
+    setfeedbackEdit({
+      item,
+      edit: true,
+    });
+  };
+
+  // For updating the feedback
+  const updateFeedback = (id, updateItem) => {
+    setFeedback(
+      feedback.map((item) =>
+        item.id === id ? { ...feedback, ...updateItem } : item
+      )
+    );
+  };
+
   return (
     // value is for if we want to give someting to children
-    <FeedbackContext.Provider value={{ feedback, addFeedback, deleteItem }}>
+    <FeedbackContext.Provider
+      value={{
+        feedback,
+        addFeedback,
+        deleteItem,
+        editFeedback,
+        feedbackEdit,
+        updateFeedback,
+      }}
+    >
       {children}
     </FeedbackContext.Provider>
   );
