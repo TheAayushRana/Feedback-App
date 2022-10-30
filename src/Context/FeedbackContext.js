@@ -1,5 +1,5 @@
 // first need to import createContext from react
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // then create variable using createContext
@@ -8,28 +8,27 @@ const FeedbackContext = createContext();
 // as we need to wrap all components in app.js to FeedbackProvider so need to take children
 // agar hum bina default ke export karte ha then import ke time { } use karna ha
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState([
-    {
-      id: 1,
-      text: "This is from feedback 1",
-      rating: 5,
-    },
-    {
-      id: 2,
-      text: "This is from feedback 2",
-      rating: 3,
-    },
-    {
-      id: 3,
-      text: "This is from feedback 3",
-      rating: 4,
-    },
-  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [feedback, setFeedback] = useState([]);
+
+  useEffect(() => {
+    feedbackData();
+  }, []);
 
   const [feedbackEdit, setfeedbackEdit] = useState({
     item: {},
     edit: false,
   });
+
+  // Fetching data from API
+
+  const feedbackData = async () => {
+    const response = await fetch("http://localhost:5000/feedback");
+    const data = await response.json();
+
+    setFeedback(data);
+    setIsLoading(false);
+  };
 
   // For Adding
   const addFeedback = (newFeedback) => {
@@ -72,6 +71,7 @@ export const FeedbackProvider = ({ children }) => {
         editFeedback,
         feedbackEdit,
         updateFeedback,
+        isLoading,
       }}
     >
       {children}
